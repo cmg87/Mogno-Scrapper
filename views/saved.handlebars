@@ -15,3 +15,21 @@
 <div class="bgimg"></div>
 <div class="bgbox"></div>
 <h3 class="welcome">Scrape, Save , Repeat<br> Your Favorite Articles From Forbes.com</h3>
+<div class="push"></div>
+
+<!--Start of Table for news-->
+<table class="table">
+    <thead class="thead-dark">
+
+    <th class="text-center">Articles</th>
+    <th class="text-center">Links</th>
+    <th class="text-center">Delete</th>
+    <th class="text-center">Notes</th>
+
+    </thead>
+    <tbody>
+    {{#each data}}
+        <tr><td> {{this.title}}</td><td><a href="{{this.link}}" target="_blank">{{this.link}}</a></td><td><button class="btn btn-danger del" data="{{this._id}}" data-state="false">Delete Article</button></td><td><button class="btn btn-light preview" data-target="#readsummary" data-toggle="modal" data="{{this._id}}">Notes</button></td></tr>
+    {{/each}}
+    </tbody>
+</table>

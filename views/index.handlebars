@@ -31,7 +31,7 @@
     </thead>
     <tbody>
             {{#each data}}
-                <tr><td> {{this.title}}</td><td><a href="{{this.link}}" target="_blank">{{this.link}}</a></td><td><button class="btn btn-danger" data="{{this._id}}">Save Article</button></td><td><button class="btn btn-primary preview" data-target="#readsummary" data-toggle="modal" data="{{this.link}}" data-title="{{this.title}}">Read</button></td></tr>
+                <tr><td> {{this.title}}</td><td><a href="{{this.link}}" target="_blank">{{this.link}}</a></td><td><button class="btn btn-danger save" data="{{this._id}}" data-state="true">Save Article</button></td><td><button class="btn btn-primary preview" data-target="#readsummary" data-toggle="modal" data="{{this.link}}" data-title="{{this.title}}">Read</button></td></tr>
             {{/each}}
     </tbody>
 </table>

@@ -69,7 +69,23 @@ router.get('/scrape', function (req,res) {
 })
 
 router.get('/saved', function (req,res) {
-    res.render('saved');
+    db.Article.find({saved:true}).then(function (data) {
+        res.render("saved", {data});
+    })
+
+})
+
+router.post('/saved', function (req,res) {
+    db.Article.findById({_id:req.body.id}, function (err, data) {
+        if (err) return handleError(err);
+
+        data.saved = req.body.state;
+        data.save(function (err, updated) {
+            if (err) return handleError(err);
+            res.send(updated);
+        });
+    });
+
 })
 
 router.post("/", function (req,res) {
