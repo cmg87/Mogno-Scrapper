@@ -17,6 +17,10 @@ var ArticleSchema = new Schema({
         required: true,
         unique: true,
     },
+    saved: {
+        type: Boolean,
+        default: false
+    },
     // `notes` is an array that stores ObjectIds
     // The ref property links these ObjectIds to the Note model
     // This allows us to populate the User with any associated Notes

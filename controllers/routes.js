@@ -1,7 +1,7 @@
 //import express to handle routing
 var express = require("express");
 var router = express.Router();
-
+var bodyParser = require("body-parser");
 //Scraper tools
 let request = require("request");
 var cheerio = require("cheerio");
@@ -31,7 +31,9 @@ connection.once('open', function () {
 })
 
 router.get('/', function (req,res) {
-    res.send("you have sucessfully reached this page");
+    db.Article.find({}).then(function (data) {
+        res.render("index", {data});
+    })
 })
 
 router.get('/scrape', function (req,res) {
@@ -66,8 +68,37 @@ router.get('/scrape', function (req,res) {
     });
 })
 
+router.get('/saved', function (req,res) {
+    res.render('saved');
+})
+
+router.post("/", function (req,res) {
+    thelink = req.body.link;
+    console.log(req.body);
+    request(thelink, function(error, response, html) {
+
+        // Load the HTML into cheerio and save it to a variable
+        // '$' becomes a shorthand for cheerio's selector commands, much like jQuery's '$'
+        var $ = cheerio.load(html);
+
+        // An empty array to save the data that we'll scrape
+        let summary = [];
+
+        // Select each element in the HTML body from which you want information.
+        // NOTE: Cheerio selectors function similarly to jQuery's selectors,
+        // but be sure to visit the package's npm page to see how it works
+        $("p").each(function(i, element) {
+
+            var text = $(element).text();
+
+            // Save these results in an object that we'll push into the results array we defined earlier
+            summary.push(text);
+        });
 
 
+        res.send(summary)
+    });
+})
 
 
 
