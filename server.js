@@ -6,7 +6,7 @@ var path = require('path');
 var exphbs = require("express-handlebars");
 
 // Set port to 3000 or process.env.port for heroku
-var PORT =  process.env.PORT || 3000;
+var PORT =  process.env.PORT || 8080;
 
 // Initialize Express
 var app = express();

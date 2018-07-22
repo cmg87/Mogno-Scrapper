@@ -69,10 +69,17 @@ router.get('/scrape', function (req,res) {
 })
 
 router.get('/saved', function (req,res) {
-    db.Article.find({saved:true}).then(function (data) {
+    db.Article.find({saved:true}).populate('notes').then(function (data) {
         res.render("saved", {data});
     })
 
+})
+
+router.get('/post-note/:id', function (req,res) {
+    db.Article.find({saved:true, _id: req.params.id}).populate('notes').then(function (data) {
+        console.log(data);
+        res.json(data);
+    })
 })
 
 router.post('/saved', function (req,res) {
@@ -116,6 +123,37 @@ router.post("/", function (req,res) {
     });
 })
 
+router.post('/notesaver',function (req,res) {
+    let notebody = {
+        note: req.body.note,
+        body : req.body.body,
+    }
+    db.Note.create(notebody)
+        .then(function(data) {
+            // If a Note was created successfully, find one Article with an `_id` equal to `req.params.id`. Update the Article to be associated with the new Note
+            // { new: true } tells the query that we want it to return the updated User -- it returns the original by default
+            // Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query
+
+            return db.Article.findOneAndUpdate({ _id: req.body.id }, {$push: {notes: data._id }}, { new: true });
+        })
+        .then(function(datanote) {
+            // If we were able to successfully update an Article, send it back to the client
+            res.json({datanote});
+        })
+        .catch(function(err) {
+            // If an error occurred, send it to the client
+            res.json(err);
+        });
+})
+
+router.post('/delete-note', function (req,res) {
+    console.log(req.body);
+    // res.send('note deleted')
+    db.Article.findOneAndUpdate({ _id: req.body.article }, {$pull: {notes: req.body.note }})
+        .then(function (data) {
+            res.send(data);
+        })
+})
 
 
 // Export routes for server.js to use.
